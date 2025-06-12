@@ -12,7 +12,7 @@ pipeline {
         stage('Build') {
             steps {
                 echo 'Building application...'
-                sh 'ls -la app/'
+                sh 'ls -la /app/'
             }
         }
         
@@ -36,7 +36,7 @@ pipeline {
             steps {
                 echo 'Deploying with Ansible...'
                 sh '''
-                cd ansible
+                cd /ansible
                 ansible-playbook playbooks/deploy-app.yml
                 '''
             }

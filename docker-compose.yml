@@ -18,7 +18,7 @@ services:
         service ssh start &&
         echo 'root:password' | chpasswd &&
         sed -i 's/#PermitRootLogin prohibit-password/PermitRootLogin yes/' /etc/ssh/sshd_config &&
-        service ssh restart &&`
+        service ssh restart &&
         tail -f /dev/null
       "
     networks:
@@ -46,7 +46,7 @@ services:
   
 
   jenkins:
-    image: jenkins/jenkins:lts
+    build: ./jenkins
     container_name: jenkins
     ports:
       - "8080:8080"
@@ -57,8 +57,6 @@ services:
       - ./ansible:/ansible
     networks:
       - ansible-net
-    environment:
-      - JENKINS_OPTS=--httpPort=8080
 
 networks:
   ansible-net:

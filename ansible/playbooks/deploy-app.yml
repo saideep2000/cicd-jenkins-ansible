@@ -4,6 +4,15 @@
   become: true
   
   tasks:
+    - name: Update apt cache
+      apt:
+        update_cache: true
+        
+    - name: Install Nginx
+      apt:
+        name: nginx
+        state: present
+        
     - name: Copy application files
       copy:
         src: ../../app/
@@ -17,6 +26,7 @@
       service:
         name: nginx
         state: started
+        enabled: true
         
   handlers:
     - name: restart nginx
