@@ -1,0 +1,25 @@
+---
+- name: Deploy Web Application
+  hosts: webservers
+  become: true
+  
+  tasks:
+    - name: Copy application files
+      copy:
+        src: ../../app/
+        dest: /var/www/html/
+        owner: www-data
+        group: www-data
+        mode: '0644'
+      notify: restart nginx
+      
+    - name: Ensure Nginx is running
+      service:
+        name: nginx
+        state: started
+        
+  handlers:
+    - name: restart nginx
+      service:
+        name: nginx
+        state: restarted
