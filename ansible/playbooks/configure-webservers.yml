@@ -1,0 +1,50 @@
+---
+- name: Configure Web Servers
+  hosts: webservers
+  become: true
+  
+  tasks:
+    - name: Update apt cache
+      apt:
+        update_cache: yes
+        
+    - name: Install Nginx
+      apt:
+        name: nginx
+        state: present
+        
+    - name: Create web directory
+      file:
+        path: /var/www/html
+        state: directory
+        owner: www-data
+        group: www-data
+        mode: '0755'
+        
+    - name: Generate custom index page
+      template:
+        src: ../templates/index.html.j2
+        dest: /var/www/html/index.html
+        owner: www-data
+        group: www-data
+        mode: '0644'
+      notify: restart nginx
+      
+    - name: Configure Nginx site
+      template:
+        src: ../templates/nginx.conf.j2
+        dest: /etc/nginx/sites-available/default
+        backup: yes
+      notify: restart nginx
+      
+    - name: Ensure Nginx is running
+      service:
+        name: nginx
+        state: started
+        enabled: yes
+        
+  handlers:
+    - name: restart nginx
+      service:
+        name: nginx
+        state: restarted

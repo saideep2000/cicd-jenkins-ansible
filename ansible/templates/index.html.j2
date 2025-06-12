@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>{{ site_title }}</title>
+    <style>
+        body { 
+            background-color: {{ background_color }}; 
+            font-family: Arial, sans-serif; 
+            text-align: center; 
+            padding: 50px;
+        }
+        h1 { color: #333; }
+        .info { margin: 20px; padding: 20px; background: white; border-radius: 10px; }
+    </style>
+</head>
+<body>
+    <h1>{{ site_title }}</h1>
+    <div class="info">
+        <p><strong>Server:</strong> {{ server_name }}</p>
+        <p><strong>Hostname:</strong> {{ ansible_hostname }}</p>
+        <p><strong>Managed by:</strong> Ansible</p>
+        <p><strong>Last Updated:</strong> {{ ansible_date_time.date }}</p>
+    </div>
+</body>
+</html>

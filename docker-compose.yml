@@ -1,0 +1,65 @@
+services:
+  ansible-control:
+    image: willhallonline/ansible:2.9-ubuntu-18.04
+    volumes:
+      - /Users/saideepsamineni/projects/Devops/db_volumes/ansible/automate-configurations-ansible/ansible:/ansible
+    working_dir: /ansible
+    command: tail -f /dev/null
+    networks:
+      - ansible-net
+
+  web1:
+    image: ubuntu:20.04
+    container_name: web1
+    command: |
+      bash -c "
+        apt-get update && 
+        apt-get install -y openssh-server python3 &&
+        service ssh start &&
+        echo 'root:password' | chpasswd &&
+        sed -i 's/#PermitRootLogin prohibit-password/PermitRootLogin yes/' /etc/ssh/sshd_config &&
+        service ssh restart &&`
+        tail -f /dev/null
+      "
+    networks:
+      - ansible-net
+    ports:
+      - "8081:80"
+
+  web2:
+    image: ubuntu:20.04
+    container_name: web2
+    command: |
+      bash -c "
+        apt-get update && 
+        apt-get install -y openssh-server python3 &&
+        service ssh start &&
+        echo 'root:password' | chpasswd &&
+        sed -i 's/#PermitRootLogin prohibit-password/PermitRootLogin yes/' /etc/ssh/sshd_config &&
+        service ssh restart &&
+        tail -f /dev/null
+      "
+    networks:
+      - ansible-net
+    ports:
+      - "8082:80"
+  
+
+  jenkins:
+    image: jenkins/jenkins:lts
+    container_name: jenkins
+    ports:
+      - "8080:8080"
+      - "50000:50000"
+    volumes:
+      - ./jenkins_home:/var/jenkins_home
+      - ./app:/app
+      - ./ansible:/ansible
+    networks:
+      - ansible-net
+    environment:
+      - JENKINS_OPTS=--httpPort=8080
+
+networks:
+  ansible-net:
+    driver: bridge

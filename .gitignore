@@ -1,0 +1,28 @@
+# Jenkins data (contains sensitive info)
+jenkins_home/
+
+# Docker volumes and temp files
+.docker/
+*.log
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# IDE files
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Temporary files
+*.tmp
+*.temp
+
+# Ansible retry files
+*.retry
+
+# Python cache (if added Python scripts)
+__pycache__/
+*.pyc
+*.pyo
